@@ -26,30 +26,34 @@ public class TrainScheduleFactory {
 
         try {
             Log.d("前JSONObjectに入れたresponse", response);
-            JSONObject rootObject = new JSONObject(response);
-            //JSONArray rootArray = new JSONArray(response);
+            //JSONObject rootObject = new JSONObject(response);
+            JSONArray rootArray = new JSONArray(response);
             Log.d("後JSONObjectに入れたresponse", response);
             // dataオブジェクトの取得
-            JSONArray dataArray = rootObject.getJSONArray("weekdays");//odpt:
+            JSONObject firstObject = rootArray.getJSONObject(0);//二つある要素のうち一つ
+            Log.d("1", "あ");
+            JSONArray dataArray = firstObject.getJSONArray("odpt:weekdays");//odpt:
+            Log.d("2", "あ");
 
+            int tmpCount=0;
             for(int i = 0; i < dataArray.length(); i++) {
+                if(++tmpCount==dataArray.length()) Log.d(tmpCount+"回", "あ");
                 TrainSchedule schedule = new TrainSchedule();
-
                 JSONObject data = dataArray.getJSONObject(i);
 
                 schedule.setDepartureTime(null);
-                if(data.has("departureTime")) {//odpt:
-                    schedule.setDepartureTime(data.getString("departureTime"));//odpt:
+                if(data.has("odpt:departureTime")) {//odpt:
+                    schedule.setDepartureTime(data.getString("odpt:departureTime"));//odpt:
                 }
 
                 schedule.setDestinationStation(null);
-                if(data.has("destinationStation")) {//odpt:
-                    schedule.setDestinationStation(data.getString("destinationStation"));//odpt:
+                if(data.has("odpt:destinationStation")) {//odpt:
+                    schedule.setDestinationStation(data.getString("odpt:destinationStation"));//odpt:
                 }
 
                 schedule.setTrainType(null);
-                if(data.has("trainType")) {//odpt:
-                    schedule.setTrainType(data.getString("trainType"));//odpt:
+                if(data.has("odpt:trainType")) {//odpt:
+                    schedule.setTrainType(data.getString("odpt:trainType"));//odpt:
                 }
 
                 list.add(schedule);

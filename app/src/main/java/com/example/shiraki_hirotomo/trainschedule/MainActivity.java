@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class MainActivity extends Activity implements LoaderCallbacks<String>{
@@ -55,15 +57,29 @@ public class MainActivity extends Activity implements LoaderCallbacks<String>{
                 Log.d("ボディ", body);
             }
         }
-        TextView textView = (TextView) findViewById(R.id.train_schedule_all);
+        //TextView textView = (TextView) findViewById(R.id.train_schedule_all);
         // テキストビューのテキストを設定します
-        textView.setText(body);
+        //textView.setText(body);
 
         ArrayList<TrainSchedule> schedule_list =  TrainScheduleFactory.create(body);
         if(schedule_list==null) Log.d("null","nullだよ");
-        Log.d("到着時刻", schedule_list.get(0).getDepartureTime());
-        Log.d("何行き", schedule_list.get(0).getDestinationStation());
-        Log.d("鈍行急行？", schedule_list.get(0).getTrainType());
+        Log.d("到着時刻", schedule_list.get(100).getDepartureTime());
+        Log.d("何行き", schedule_list.get(100).getDestinationStation());
+        Log.d("鈍行急行？", schedule_list.get(100).getTrainType());
+
+        ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+        for(TrainSchedule trainSchedule : schedule_list){
+            HashMap<String, String> map = new HashMap<String, String>();
+            map.put("departunetime",trainSchedule.getDepartureTime());
+            map.put("destinationstation",trainSchedule.getDestinationStation());
+            map.put("traintype",trainSchedule.getTrainType());
+            data.add(map);
+        }
+
+        SimpleAdapter sa = new SimpleAdapter(this, data, R.layout.row, new String[]{"departunetime", "destinationstation", "traintype"}, new int[]{R.id.departunetime, R.id.destinationstation, R.id.traintype});
+
+        ListView lv = (ListView)findViewById(R.id.listview);
+        lv.setAdapter(sa);
     }
 
     @Override

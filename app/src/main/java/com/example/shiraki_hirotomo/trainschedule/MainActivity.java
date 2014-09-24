@@ -32,11 +32,9 @@ public class MainActivity extends Activity implements LoaderCallbacks<String>{
         getLoaderManager().initLoader(0, bundle, this);
 
 
-
-
-
     }
 
+    //LoaderManger指定されたIDに紐付くLoaderインスタンスの生成要求です。ここで、データのロード準備ができたLoaderインスタンスを返却します。
     @Override
     public Loader<String> onCreateLoader(int id, Bundle bundle) {
 
@@ -48,9 +46,13 @@ public class MainActivity extends Activity implements LoaderCallbacks<String>{
         return loader;
     }
 
+
+
+
+    //Loaderのデータロード完了通知です。
     @Override
     public void onLoadFinished(Loader<String> loader, String body) {
-
+        Log.d("loaderの中身:",loader.toString());
         // 実行結果の書き出し（6）
         if ( loader.getId() == 0 ) {
             if (body != null) {
@@ -76,12 +78,13 @@ public class MainActivity extends Activity implements LoaderCallbacks<String>{
             data.add(map);
         }
 
+        Log.d("dataの中",data.toString());
         SimpleAdapter sa = new SimpleAdapter(this, data, R.layout.row, new String[]{"departunetime", "destinationstation", "traintype"}, new int[]{R.id.departunetime, R.id.destinationstation, R.id.traintype});
 
         ListView lv = (ListView)findViewById(R.id.listview);
         lv.setAdapter(sa);
     }
-
+    //指定されたIDに紐付くLoaderインスタンスの生成要求です。ここで、データのロード準備ができたLoaderインスタンスを返却します。
     @Override
     public void onLoaderReset(Loader<String> loader) {
         // 今回は何も処理しない
